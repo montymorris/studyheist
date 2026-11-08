@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Study Heist</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' role='img' aria-label='Study Heist logo'%3E%3Crect x='2' y='2' width='60' height='60' rx='16' fill='%2314202b'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23e5b348' stroke-width='4'/%3E%3Cpath d='M32 47V31' stroke='%23e5b348' stroke-width='3.5' stroke-linecap='round'/%3E%3Cpath d='M32 35C24 35 20 30 20 24C27 24 32 28 32 35Z' fill='%235fd18a'/%3E%3Cpath d='M32 31C32 23 37 18 44 18C44 26 39 31 32 31Z' fill='%235fd18a'/%3E%3C/svg%3E ">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
 <style>
 :root{--bg:#eef2ee;--card:#fff;--ink:#14202b;--mute:#5d6b76;--line:#d5dcd6;--brass:#b8841c;--moss:#1f9a52;--pink:#e0457b;--steel:#e3e9e6;
@@ -16,7 +17,8 @@ body{max-width:480px;margin:0 auto;min-height:100vh;padding:0 16px 96px}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;border:0}
 header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px}
-h1{font-size:24px;font-weight:800;margin:0;letter-spacing:-.02em}
+h1{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:800;margin:0;letter-spacing:-.02em}
+.logo{width:34px;height:34px;flex:none}
 .stats{display:flex;gap:8px;margin:4px 0 14px}
 .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 10px;font-weight:800;font-size:18px;display:flex;flex-direction:column}
 .stat small{font-weight:400;color:var(--mute);font-size:12px}
@@ -74,7 +76,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </style>
 </head>
 <body>
-<header><h1>Study Heist</h1><span id="streakTop"></span></header>
+<header><h1><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="16" fill="#14202b"/><circle cx="32" cy="32" r="20" fill="none" stroke="#e5b348" stroke-width="4"/><path d="M32 47V31" stroke="#e5b348" stroke-width="3.5" stroke-linecap="round"/><path d="M32 35C24 35 20 30 20 24C27 24 32 28 32 35Z" fill="#5fd18a"/><path d="M32 31C32 23 37 18 44 18C44 26 39 31 32 31Z" fill="#5fd18a"/></svg> Study Heist</h1><span id="streakTop"></span></header>
 <div class="stats">
   <div class="stat"><span id="sSeeds">0</span><small>seeds</small></div>
   <div class="stat"><span id="sCoins">0</span><small>coins</small></div>
