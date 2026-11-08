@@ -112,7 +112,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <p class="msg" id="syncMsg" style="margin:0 0 10px;text-align:left">Sync is off. Data is saved on this device only.</p>
     <div class="row"><button class="btn" id="syncOn">Turn on sync</button><button class="btn alt" id="syncCopy">Copy sync link</button></div>
     <input id="syncId" placeholder="Already have a sync ID or link? Paste it here" aria-label="Sync ID or link">
-    <div class="row"><button class="btn alt" id="syncLink">Link this device</button></div>
+    <div class="row"><button class="btn alt" id="syncLink">Link this device</button><button class="btn alt" id="syncOff">Turn off sync</button></div>
     <div class="row"><button class="btn alt" id="bkCopy">Copy backup code</button><button class="btn alt" id="bkRestore">Restore from code</button></div>
   </div>
 </main>
@@ -258,6 +258,13 @@ $('#syncCopy').onclick=function(){if(!syncId){setSync('Turn on sync first.');ret
 $('#bkCopy').onclick=function(){copy(btoa(unescape(encodeURIComponent(JSON.stringify(S)))),'Backup code copied. Keep it somewhere safe.')};
 $('#bkRestore').onclick=function(){var c=window.prompt('Paste your backup code:');if(!c)return;
   try{var R=JSON.parse(decodeURIComponent(escape(atob(c.trim()))));if(!R.tasks)throw 0;S=R;save();checkStreak();render();setSync('Backup restored.')}catch(e){setSync('That backup code is not valid.')}};
+$('#syncOff').onclick=function(){
+  if(!syncId){setSync('Sync is already off.');return}
+  if(!window.confirm('Turn off sync on this device? Your data stays here and the other devices keep the synced copy.'))return;
+  clearTimeout(pt);syncId='';
+  try{localStorage.removeItem('sh_sync');localStorage.removeItem('vg_sync')}catch(e){}
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+  setSync('Sync is off. Data is saved on this device only.')};
 document.addEventListener('visibilitychange',function(){if(!document.hidden)pull()});
 syncId=getId();if(syncId){setSync('Sync is on.');pull()}
 })();
