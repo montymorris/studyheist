@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Study Heist</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#eef2ee;--card:#fff;--ink:#14202b;--mute:#5d6b76;--line:#d5dcd6;--brass:#b8841c;--moss:#1f9a52;--pink:#e0457b;--steel:#e3e9e6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1720;--card:#16232f;--ink:#eaf1ee;--mute:#8fa2ad;--line:#26384a;--brass:#e5b348;--moss:#5fd18a;--pink:#ff7fa8;--steel:#1d2e3c}}
+:root[data-theme="dark"]{--bg:#0e1720;--card:#16232f;--ink:#eaf1ee;--mute:#8fa2ad;--line:#26384a;--brass:#e5b348;--moss:#5fd18a;--pink:#ff7fa8;--steel:#1d2e3c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+body{max-width:480px;margin:0 auto;min-height:100vh;padding:0 16px 96px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px}
+h1{font-size:24px;font-weight:800;margin:0;letter-spacing:-.02em}
+.stats{display:flex;gap:8px;margin:4px 0 14px}
+.stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 10px;font-weight:800;font-size:18px;display:flex;flex-direction:column}
+.stat small{font-weight:400;color:var(--mute);font-size:12px}
+.banner{background:var(--pink);color:#fff;border-radius:14px;padding:10px 14px;margin-bottom:12px;font-weight:600;font-size:14px}
+.add{display:flex;gap:8px;margin-bottom:6px}
+.add input{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.add select{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 8px;color:var(--ink);font:inherit}
+.btn{background:var(--brass);color:#1a1405;font-weight:800;border-radius:12px;padding:12px 16px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.alt{background:var(--steel);color:var(--ink)}
+.hint{color:var(--mute);font-size:13px;margin:0 0 14px}
+.vault{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.vault.open{border-color:var(--brass)}
+.vault h3{margin:0 0 10px;font-size:17px;display:flex;justify-content:space-between;gap:8px}
+.vault h3 span{font-size:20px}
+.pins{display:flex;gap:6px;margin-bottom:12px}
+.pin{flex:1;height:22px;border-radius:6px;background:var(--steel);border:1px solid var(--line);position:relative}
+.pin.on{background:var(--brass);border-color:var(--brass);box-shadow:0 0 10px color-mix(in srgb,var(--brass) 60%,transparent)}
+.row{display:flex;gap:8px}
+.row .btn{flex:1}
+.x{background:none;color:var(--mute);padding:4px 8px}
+.empty{text-align:center;color:var(--mute);padding:36px 12px;border:1px dashed var(--line);border-radius:18px}
+.plots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 16px}
+.plot{aspect-ratio:1;border-radius:16px;background:var(--steel);border:1px solid var(--line);display:grid;place-items:center;font-size:34px}
+.plot.new{animation:pop .6s}
+.plot.wilt{filter:grayscale(1) brightness(.8);transform:rotate(-8deg)}
+.slot{background:var(--card);border:2px solid var(--brass);border-radius:20px;padding:14px}
+.reels{display:flex;gap:8px;margin-bottom:12px}
+.reel{flex:1;aspect-ratio:1;background:var(--steel);border-radius:14px;display:grid;place-items:center;font-size:44px;border:1px solid var(--line)}
+.reel.spin{filter:blur(1.5px)}
+.msg{min-height:22px;text-align:center;font-weight:600;margin:0 0 10px}
+.dex{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.dx{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 2px;text-align:center;font-size:12px;color:var(--mute)}
+.dx b{display:block;font-size:28px;font-weight:400}
+.dx.no b{filter:brightness(0) opacity(.3)}
+h2{font-size:15px;margin:18px 0 0}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;background:var(--card);border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));gap:8px}
+nav button{flex:1;max-width:150px;background:none;color:var(--mute);padding:8px;border-radius:12px;font-weight:600;font-size:14px}
+nav button.on{background:var(--steel);color:var(--ink)}
+.ov{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.ov.show{display:flex}
+.clock{font-size:76px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bar{width:min(320px,80vw);height:10px;background:var(--steel);border-radius:6px;overflow:hidden;margin:14px 0 24px}
+.bar i{display:block;height:100%;background:var(--brass);width:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:12px 20px;font-weight:800}
+.bit{position:fixed;top:-30px;font-size:26px;pointer-events:none;z-index:50;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.8}}
+@keyframes pop{0%{transform:scale(.2)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.bit,.plot.new{animation:none}}
+.sync{margin-top:8px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+.sync input{width:100%;background:var(--steel);border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0 8px}
+.sync .row{margin-bottom:8px}.sync .btn{padding:10px 8px;font-size:14px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--moss);outline-offset:2px}
+</style>
+</head>
+<body>
+<header><h1>Study Heist</h1><span id="streakTop"></span></header>
+<div class="stats">
+  <div class="stat"><span id="sSeeds">0</span><small>seeds</small></div>
+  <div class="stat"><span id="sCoins">0</span><small>coins</small></div>
+  <div class="stat"><span id="sStreak">0</span><small>day streak</small></div>
+</div>
+<div id="wiltBanner" class="banner" hidden>Your garden wilted because you skipped a day. Finish one sprint to revive it.</div>
+
+<main id="tabVaults">
+  <div class="add">
+    <input id="tName" placeholder="Homework to crack (e.g. Maths ex. 4)" maxlength="60" aria-label="Homework name">
+    <select id="tPins" aria-label="Number of sprints"><option value="1">1 pin</option><option value="2" selected>2 pins</option><option value="3">3 pins</option><option value="4">4 pins</option></select>
+    <button class="btn" id="addBtn">Lock it</button>
+  </div>
+  <p class="hint">Each pin is one focus sprint. Pick all the pins to crack the vault.</p>
+  <div id="vaults"></div>
+</main>
+
+<main id="tabGarden" hidden>
+  <div class="plots" id="plots"></div>
+  <div class="slot">
+    <div class="reels"><div class="reel" id="r0">🌱</div><div class="reel" id="r1">🌱</div><div class="reel" id="r2">🌱</div></div>
+    <p class="msg" id="slotMsg">Pull the lever to plant a seed.</p>
+    <div class="row"><button class="btn" id="pull">Pull lever (1 seed)</button><button class="btn alt" id="buy">Buy seed (10 coins)</button></div>
+  </div>
+  <h2>Plant collection</h2>
+  <div class="dex" id="dex"></div>
+  <h2>Sync across devices</h2>
+  <div class="sync">
+    <p class="msg" id="syncMsg" style="margin:0 0 10px;text-align:left">Sync is off. Data is saved on this device only.</p>
+    <div class="row"><button class="btn" id="syncOn">Turn on sync</button><button class="btn alt" id="syncCopy">Copy sync link</button></div>
+    <input id="syncId" placeholder="Already have a sync ID or link? Paste it here" aria-label="Sync ID or link">
+    <div class="row"><button class="btn alt" id="syncLink">Link this device</button></div>
+    <div class="row"><button class="btn alt" id="bkCopy">Copy backup code</button><button class="btn alt" id="bkRestore">Restore from code</button></div>
+  </div>
+</main>
+
+<nav><button id="nV" class="on">Vaults</button><button id="nG">Garden</button></nav>
+
+<div class="ov" id="ov">
+  <div id="ovPick">
+    <h2 style="font-size:22px;margin:0" id="ovTitle"></h2>
+    <p class="hint" style="margin-top:6px">Choose a sprint length. Stay on this screen to keep your streak.</p>
+    <div class="chips" id="chips"></div>
+    <button class="btn alt" id="ovBack">Back</button>
+  </div>
+  <div id="ovRun" hidden>
+    <p class="hint" id="ovWhat"></p>
+    <div class="clock" id="clock">25:00</div>
+    <div class="bar"><i id="barFill"></i></div>
+    <button class="btn alt" id="ovGive">Give up this sprint</button>
+  </div>
+</div>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var PLANTS={'🌱':['Sprout','c'],'🌿':['Herb','c'],'🍀':['Clover','c'],'🌷':['Tulip','r'],'🌻':['Sunflower','r'],'🌸':['Blossom','r'],'🌴':['Palm','j'],'🌳':['Money tree','j']};
+var COM=['🌱','🌿','🍀'],RARE=['🌷','🌻','🌸'],JACK=['🌳','🌴'],ALL=Object.keys(PLANTS);
+function day(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function load(){try{var j=JSON.parse((localStorage.getItem('sh1')||localStorage.getItem('vg1')));if(j)return j}catch(e){}return{tasks:[],seeds:1,coins:0,streak:0,last:'',garden:[],dex:{},wilt:false}}
+var S=load();
+function save(){S.updated=Date.now();try{localStorage.setItem('sh1',JSON.stringify(S))}catch(e){}push()}
+var yest=new Date();yest.setDate(yest.getDate()-1);
+function checkStreak(){if(S.last&&S.last!==day(new Date())&&S.last!==day(yest)&&S.streak>0){S.streak=0;S.wilt=true;save()}}
+checkStreak();
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function buzz(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+var ac=null;
+function beep(f,d,t){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=.08;g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function confetti(set,n){for(var i=0;i<(n||24);i++){var b=document.createElement('div');b.className='bit';b.textContent=pick(set);b.style.left=Math.random()*100+'vw';b.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(b);setTimeout(function(x){x.remove()},2300,b)}}
+function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+function render(){
+  $('#sSeeds').textContent=S.seeds;$('#sCoins').textContent=S.coins;$('#sStreak').textContent=S.streak;
+  $('#streakTop').textContent=S.streak?'🔥 '+S.streak:'';
+  $('#wiltBanner').hidden=!S.wilt;
+  var v=$('#vaults');
+  if(!S.tasks.length){v.innerHTML='<div class="empty">No vaults yet. Add your first piece of homework above and lock it up.</div>'}
+  else v.innerHTML=S.tasks.map(function(t){
+    var open=t.done>=t.pins,p='';
+    for(var i=0;i<t.pins;i++)p+='<div class="pin'+(i<t.done?' on':'')+'"></div>';
+    return '<div class="vault'+(open?' open':'')+'"><h3><b>'+esc(t.name)+'</b><span>'+(open?'🔓':'🔒')+'</span></h3><div class="pins">'+p+'</div><div class="row">'+
+    (open?'<button class="btn alt" data-clear="'+t.id+'">Clear vault</button>':'<button class="btn" data-go="'+t.id+'">Pick a pin ('+(t.pins-t.done)+' left)</button><button class="x" data-del="'+t.id+'" aria-label="Delete">✕</button>')+'</div></div>'}).join('');
+  $('#plots').innerHTML=Array.from({length:12},function(_,i){var e=S.garden[i];return '<div class="plot'+(S.wilt&&e?' wilt':'')+(i===newIdx?' new':'')+'">'+(e||'')+'</div>'}).join('');
+  newIdx=-1;
+  $('#dex').innerHTML=ALL.map(function(e){var n=S.dex[e]||0;return '<div class="dx'+(n?'':' no')+'"><b>'+e+'</b>'+(n?PLANTS[e][0]+' ×'+n:'???')+'</div>'}).join('');
+  $('#pull').disabled=S.seeds<1||spinning;$('#buy').disabled=S.coins<10;
+}
+var newIdx=-1,spinning=false;
+
+function tab(g){$('#tabVaults').hidden=g;$('#tabGarden').hidden=!g;$('#nV').classList.toggle('on',!g);$('#nG').classList.toggle('on',g);window.scrollTo(0,0)}
+$('#nV').onclick=function(){tab(false)};$('#nG').onclick=function(){tab(true)};
+
+function addTask(){var n=$('#tName').value.trim();if(!n){$('#tName').focus();return}
+  S.tasks.unshift({id:Date.now(),name:n,pins:+$('#tPins').value,done:0});$('#tName').value='';save();render();buzz(15);beep(300,.1,'square')}
+$('#addBtn').onclick=addTask;$('#tName').onkeydown=function(e){if(e.key==='Enter')addTask()};
+
+$('#vaults').onclick=function(e){
+  var t=e.target,id;
+  if(id=t.getAttribute('data-go'))openSprint(+id);
+  else if(id=t.getAttribute('data-del')){S.tasks=S.tasks.filter(function(x){return x.id!=id});save();render()}
+  else if(id=t.getAttribute('data-clear')){S.tasks=S.tasks.filter(function(x){return x.id!=id});save();render()}
+};
+
+var cur=null,timer=null,endAt=0,total=0;
+function openSprint(id){cur=S.tasks.filter(function(x){return x.id===id})[0];if(!cur)return;
+  $('#ovTitle').textContent=cur.name;$('#ovWhat').textContent=cur.name;
+  $('#chips').innerHTML=[[1,'1 min test'],[5,'5 min'],[10,'10 min'],[25,'25 min']].map(function(m){return '<button class="chip" data-m="'+m[0]+'">'+m[1]+'</button>'}).join('');
+  $('#ovPick').hidden=false;$('#ovRun').hidden=true;$('#ov').classList.add('show')}
+$('#ovBack').onclick=function(){$('#ov').classList.remove('show')};
+$('#chips').onclick=function(e){var m=e.target.getAttribute('data-m');if(!m)return;
+  total=m*60000;endAt=Date.now()+total;$('#ovPick').hidden=true;$('#ovRun').hidden=false;tick();timer=setInterval(tick,250);beep(440,.12)};
+function tick(){var l=endAt-Date.now();if(l<=0){finish();return}
+  var s=Math.ceil(l/1000);$('#clock').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  $('#barFill').style.width=(100-l/total*100)+'%';document.title=$('#clock').textContent+' · Study Heist'}
+$('#ovGive').onclick=function(){clearInterval(timer);document.title='Study Heist';$('#ov').classList.remove('show')};
+function finish(){clearInterval(timer);document.title='Study Heist';$('#ov').classList.remove('show');
+  var today=day(new Date());
+  if(S.last!==today){S.streak=(S.last===day(yest)||S.streak>0)?S.streak+1:1;S.last=today}
+  S.wilt=false;S.seeds++;cur.done++;
+  var cracked=cur.done>=cur.pins;
+  if(cracked){S.coins+=cur.pins*3;S.seeds++}
+  save();render();buzz([80,40,80]);beep(660,.15);setTimeout(function(){beep(880,.25)},150);
+  confetti(cracked?['🪙','💎','🔓','🌱']:['🌱','✨'],cracked?40:18);
+  $('#slotMsg').textContent=cracked?'Vault cracked! +'+(cur.pins*3)+' coins and 2 seeds. Plant them.':'Pin picked! You earned a seed.';
+  tab(cracked?false:true);if(cracked)setTimeout(function(){alert('Vault cracked! +'+(cur.pins*3)+' coins and 2 seeds. Head to the Garden to plant them.')},300)}
+
+function roll(){var r=Math.random();
+  if(r<.04){var j=pick(JACK);return{reels:[j,j,j],plant:j,coins:50,msg:'JACKPOT! Money tree blooms. +50 coins'}}
+  if(r<.16){var x=pick(RARE);return{reels:[x,x,x],plant:x,coins:15,msg:'Triple bloom! Rare plant. +15 coins'}}
+  if(r<.5){var a=pick(Math.random()<.35?RARE:COM),b=pick(ALL.filter(function(z){return z!==a}));var rr=[a,a,b];if(Math.random()<.5)rr=[a,b,a];
+    return{reels:rr,plant:a,coins:5,msg:'So close! Two match. +5 coins'}}
+  var c=COM.slice().sort(function(){return Math.random()-.5});return{reels:c,plant:c[0],coins:1,msg:'A little sprout. +1 coin'}}
+$('#pull').onclick=function(){if(S.seeds<1||spinning)return;spinning=true;S.seeds--;save();render();
+  var res=roll(),rs=[0,1,2].map(function(i){return $('#r'+i)});
+  $('#slotMsg').textContent='Spinning…';rs.forEach(function(r){r.classList.add('spin')});
+  var iv=setInterval(function(){rs.forEach(function(r){if(r.classList.contains('spin'))r.textContent=pick(ALL)});beep(200+Math.random()*100,.03,'square')},80);
+  rs.forEach(function(r,i){setTimeout(function(){r.classList.remove('spin');r.textContent=res.reels[i];buzz(20);beep(500+i*120,.1);
+    if(i===2){clearInterval(iv);end(res)}},900+i*600)})};
+function end(res){spinning=false;S.coins+=res.coins;S.dex[res.plant]=(S.dex[res.plant]||0)+1;
+  var idx=S.garden.length<12?S.garden.length:Math.floor(Math.random()*12);S.garden[idx]=res.plant;newIdx=idx;
+  save();render();$('#slotMsg').textContent=res.msg;
+  if(res.coins>=15){buzz([100,50,100,50,200]);confetti(['🪙','💎',res.plant],45);beep(988,.3)}}
+$('#buy').onclick=function(){if(S.coins>=10){S.coins-=10;S.seeds++;save();render();beep(520,.1)}};
+render();
+
+/* ---------- Sync (jsonblob.com, no keys) ---------- */
+var API='https://jsonblob.com/api/jsonBlob/',HD={'Content-Type':'application/json','Accept':'application/json'};
+var syncId='',pt=null;
+function getId(){var m=location.hash.match(/sync=([\w-]+)/);if(m){try{localStorage.setItem('sh_sync',m[1])}catch(e){}return m[1]}try{return (localStorage.getItem('sh_sync')||localStorage.getItem('vg_sync'))||''}catch(e){return ''}}
+function setSync(t){$('#syncMsg').textContent=t}
+function push(){if(!syncId)return;clearTimeout(pt);pt=setTimeout(function(){
+  fetch(API+syncId,{method:'PUT',headers:HD,body:JSON.stringify(S)}).then(function(r){setSync(r.ok?'Synced at '+new Date().toLocaleTimeString():'Sync failed. It will retry on your next change.')}).catch(function(){setSync('Offline. Saved on this device only.')})},800)}
+function pull(){if(!syncId)return;
+  fetch(API+syncId,{headers:HD}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(R){
+    if(R&&typeof R==='object'&&(R.updated||0)>(S.updated||0)){S=R;try{localStorage.setItem('sh1',JSON.stringify(S))}catch(e){}checkStreak();render();setSync('Synced. Loaded newer data from another device.')}
+    else{setSync('Synced at '+new Date().toLocaleTimeString());if((S.updated||0)>(R.updated||0))push()}
+  }).catch(function(){setSync('Could not reach the sync service. Using this device’s data.')})}
+function useId(id){syncId=id;try{localStorage.setItem('sh_sync',id)}catch(e){}
+  try{history.replaceState(null,'','#sync='+id)}catch(e){}setSync('Sync is on.')}
+$('#syncOn').onclick=function(){
+  if(syncId){setSync('Sync is already on. Use Copy sync link to open it on another device.');return}
+  S.updated=Date.now();setSync('Creating…');
+  fetch(API,{method:'POST',headers:HD,body:JSON.stringify(S)}).then(function(r){
+    var loc=r.headers.get('Location');if(!r.ok||!loc)throw 0;useId(loc.split('/').pop());save()
+  }).catch(function(){setSync('Could not create automatically. Go to jsonblob.com, type {} and save, copy the ID from the address bar, paste it below and tap Link this device.')})};
+$('#syncLink').onclick=function(){
+  var id=$('#syncId').value.trim().replace(/.*sync=/,'').split('/').pop();
+  if(!/^[\w-]{6,}$/.test(id)){setSync('That does not look like a sync ID or link.');return}
+  useId(id);fetch(API+id,{headers:HD}).then(function(r){return r.ok?r.json():null}).then(function(R){
+    if(R&&R.tasks&&(R.updated||0)>(S.updated||0)){pull()}else{S.updated=Date.now();save()}}).catch(function(){setSync('Could not reach the sync service.')})};
+function copy(t,done){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){setSync(done)},function(){window.prompt('Copy this:',t)})}else window.prompt('Copy this:',t)}
+$('#syncCopy').onclick=function(){if(!syncId){setSync('Turn on sync first.');return}
+  copy(location.origin+location.pathname+'#sync='+syncId,'Sync link copied. Open it on your other device.')};
+$('#bkCopy').onclick=function(){copy(btoa(unescape(encodeURIComponent(JSON.stringify(S)))),'Backup code copied. Keep it somewhere safe.')};
+$('#bkRestore').onclick=function(){var c=window.prompt('Paste your backup code:');if(!c)return;
+  try{var R=JSON.parse(decodeURIComponent(escape(atob(c.trim()))));if(!R.tasks)throw 0;S=R;save();checkStreak();render();setSync('Backup restored.')}catch(e){setSync('That backup code is not valid.')}};
+document.addEventListener('visibilitychange',function(){if(!document.hidden)pull()});
+syncId=getId();if(syncId){setSync('Sync is on.');pull()}
+})();
+</script>
+</body>
+</html>
