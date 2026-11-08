@@ -231,7 +231,7 @@ render();
 var API='https://jsonblob.com/api/jsonBlob/',HD={'Content-Type':'application/json','Accept':'application/json'};
 var syncId='',pt=null;
 function getId(){var m=location.hash.match(/sync=([\w-]+)/);if(m){try{localStorage.setItem('sh_sync',m[1])}catch(e){}return m[1]}try{return (localStorage.getItem('sh_sync')||localStorage.getItem('vg_sync'))||''}catch(e){return ''}}
-function setSync(t){$('#syncMsg').textContent=t}
+function setSync(t){$('#syncMsg').textContent=t;var b=$('#syncOn');b.textContent=syncId?'Sync is on ✓':'Turn on sync';b.disabled=!!syncId;$('#syncOff').disabled=!syncId;$('#syncCopy').disabled=!syncId}
 function push(){if(!syncId)return;clearTimeout(pt);pt=setTimeout(function(){
   fetch(API+syncId,{method:'PUT',headers:HD,body:JSON.stringify(S)}).then(function(r){setSync(r.ok?'Synced at '+new Date().toLocaleTimeString():'Sync failed. It will retry on your next change.')}).catch(function(){setSync('Offline. Saved on this device only.')})},800)}
 function pull(){if(!syncId)return;
@@ -266,7 +266,7 @@ $('#syncOff').onclick=function(){
   try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
   setSync('Sync is off. Data is saved on this device only.')};
 document.addEventListener('visibilitychange',function(){if(!document.hidden)pull()});
-syncId=getId();if(syncId){setSync('Sync is on.');pull()}
+syncId=getId();if(syncId){setSync('Sync is on.');pull()}else setSync('Sync is off. Data is saved on this device only.')
 })();
 </script>
 </body>
